@@ -1,5 +1,4 @@
-//your JS code here. If required.
-const submitBtn = document.getElementById("submit");
+//your JS code here. If reqconst submitBtn = document.getElementById("submit");
 const playerForm = document.getElementById("player-form");
 const game = document.getElementById("game");
 const message = document.querySelector(".message");
