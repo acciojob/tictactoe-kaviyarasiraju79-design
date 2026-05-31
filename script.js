@@ -1,4 +1,5 @@
 //your JS code here. If reqconst submitBtn = document.getElementById("submit");
+const submitBtn = document.getElementById("submit");
 const playerForm = document.getElementById("player-form");
 const game = document.getElementById("game");
 const message = document.querySelector(".message");
@@ -8,8 +9,9 @@ let player1 = "";
 let player2 = "";
 let currentPlayer = "";
 let currentSymbol = "X";
-let board = Array(9).fill("");
 let gameOver = false;
+
+const board = Array(9).fill("");
 
 submitBtn.addEventListener("click", () => {
   player1 = document.getElementById("player-1").value.trim();
@@ -21,7 +23,7 @@ submitBtn.addEventListener("click", () => {
   game.style.display = "block";
 
   currentPlayer = player1;
-  message.textContent = `${currentPlayer}, you're up`;
+  message.textContent = `${player1}, you're up`;
 });
 
 cells.forEach((cell) => {
@@ -54,7 +56,7 @@ cells.forEach((cell) => {
 });
 
 function checkWinner() {
-  const wins = [
+  const patterns = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -65,11 +67,9 @@ function checkWinner() {
     [2, 4, 6]
   ];
 
-  return wins.some(([a, b, c]) => {
-    return (
-      board[a] &&
+  return patterns.some(([a, b, c]) => {
+    return board[a] &&
       board[a] === board[b] &&
-      board[a] === board[c]
-    );
+      board[a] === board[c];
   });
 }
