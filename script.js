@@ -1,75 +1,93 @@
 //your JS code here. If reqconst submitBtn = document.getElementById("submit");
+let player1 = "";
+let player2 = "";
+let currentPlayer = "x";
+let gameOver = false;
+
 const submitBtn = document.getElementById("submit");
-const playerForm = document.getElementById("player-form");
-const game = document.getElementById("game");
 const message = document.querySelector(".message");
 const cells = document.querySelectorAll(".cell");
 
-let player1 = "";
-let player2 = "";
-let currentPlayer = "";
-let currentSymbol = "X";
-let gameOver = false;
-
-const board = Array(9).fill("");
-
 submitBtn.addEventListener("click", () => {
-  player1 = document.getElementById("player-1").value.trim();
-  player2 = document.getElementById("player-2").value.trim();
 
-  if (!player1 || !player2) return;
+    player1 = document.getElementById("player1").value;
+    player2 = document.getElementById("player2").value;
 
-  playerForm.style.display = "none";
-  game.style.display = "block";
-
-  currentPlayer = player1;
-  message.textContent = `${player1}, you're up`;
+    message.innerText = `${player1}, you're up`;
 });
 
 cells.forEach((cell) => {
-  cell.addEventListener("click", () => {
-    if (gameOver) return;
 
-    const index = Number(cell.id) - 1;
+    cell.addEventListener("click", () => {
 
-    if (board[index] !== "") return;
+        // game over na click panna kudathu
+        if (gameOver) {
+            return;
+        }
 
-    board[index] = currentSymbol;
-    cell.textContent = currentSymbol;
+        // already filled cell na stop
+        if (cell.innerText !== "") {
+            return;
+        }
 
-    if (checkWinner()) {
-      message.textContent = `${currentPlayer} congratulations you won!`;
-      gameOver = true;
-      return;
-    }
+        // x or o set
+        cell.innerText = currentPlayer;
 
-    if (currentSymbol === "X") {
-      currentSymbol = "O";
-      currentPlayer = player2;
-    } else {
-      currentSymbol = "X";
-      currentPlayer = player1;
-    }
+        // winner check
+        if (checkWinner()) {
 
-    message.textContent = `${currentPlayer}, you're up`;
-  });
+            gameOver = true;
+
+            if (currentPlayer === "x") {
+                message.innerText = `Player1 congratulations you won!`;
+            } else {
+                message.innerText = `Player2 congratulations you won!`;
+            }
+
+            return;
+        }
+
+        // player switch
+        if (currentPlayer === "x") {
+
+            currentPlayer = "o";
+            message.innerText = `${player2}, you're up`;
+
+        } else {
+
+            currentPlayer = "x";
+            message.innerText = `${player1}, you're up`;
+        }
+
+    });
+
 });
 
 function checkWinner() {
-  const patterns = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ];
 
-  return patterns.some(([a, b, c]) => {
-    return board[a] &&
-      board[a] === board[b] &&
-      board[a] === board[c];
-  });
+    const winPatterns = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
+    ];
+
+    for (let i = 0; i < winPatterns.length; i++) {
+
+        let pattern = winPatterns[i];
+
+        let a = cells[pattern[0]].innerText;
+        let b = cells[pattern[1]].innerText;
+        let c = cells[pattern[2]].innerText;
+
+        if (a !== "" && a === b && b === c) {
+            return true;
+        }
+    }
+
+    return false;
 }
